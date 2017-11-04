@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
+require 'devise'
+require_relative 'support/controller_macros'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -39,4 +41,19 @@ RSpec.configure do |config|
   # the seed, which is printed after each run.
   #     --seed 1234
   config.order = "random"
+
+  # Use the following instead if you are on Devise <= 4.1.1
+  config.include Devise::TestHelpers, :type => :controller
+  # Use the following instead if you are on Devise <= 4.1.0
+  # config.include Devise::TestHelpers, :type => :controller
+  config.extend ControllerMacros, :type => :controller  
+end
+
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    # Choose a test framework:
+    with.test_framework :rspec
+    # Or, choose the following (which implies all of the above):
+    with.library :rails
+  end
 end
