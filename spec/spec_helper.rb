@@ -47,6 +47,14 @@ RSpec.configure do |config|
   # Use the following instead if you are on Devise <= 4.1.0
   # config.include Devise::TestHelpers, :type => :controller
   config.extend ControllerMacros, :type => :controller  
+
+  config.include Request::JsonHelpers, :type => :controller
+  config.include Request::HeadersHelpers, :type => :controller
+  config.include Devise::TestHelpers, :type => :controller
+
+  config.before(:each, type: :controller) do 
+    include_default_accept_headers
+  end
 end
 
 Shoulda::Matchers.configure do |config|

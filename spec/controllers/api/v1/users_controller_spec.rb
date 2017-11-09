@@ -2,17 +2,18 @@ require 'spec_helper'
 require 'api/v1/users_controller'
 
 describe Api::V1::UsersController do
-	#login_admin
-	before(:each) { request.headers['Accept'] = 'application/vnd.marketplace.v1'}
+	#before(:each) { request.headers['Accept'] = "#{Mime::JSON}" }
+	#before(:each) { request.headers['Content-Type'] = Mime::JSON.to_s 1}
+	#before(:each) { request.headers['Accept'] = 'application/vnd.marketplace.v1'}
 
 	describe 'GET #show' do
 		before(:each) do
 			@user = FactoryGirl.create :user
-			get :show, id: @user.id, format: :json
+			get :show, id: @user.id #, format: :json
 		end
 
 		it 'responds with a json object that includes the user email' do
-			user_response = JSON.parse(response.body, symbolize_names: true)
+			user_response = json_response
 			expect(user_response[:email]).to eq(@user.email)
 		end
 
@@ -27,8 +28,8 @@ describe Api::V1::UsersController do
 			end
 
 			it 'creates the user' do
-				json_response = JSON.parse(response.body, symbolize_names: true)
-				expect(json_response[:email]).to eq(@valid_attributes[:email])
+				user_response = json_response
+				expect(user_response[:email]).to eq(@valid_attributes[:email])
 			end
 
 			it { should respond_with 201 }
@@ -41,13 +42,13 @@ describe Api::V1::UsersController do
 			end
 
 			it 'does not create the user' do
-				json_response = JSON.parse(response.body, symbolize_names: true)
-				expect(json_response).to have_key(:errors)
+				user_response = json_response
+				expect(user_response).to have_key(:errors)
 			end
 
 			it 'renders the json error' do
-				json_response = JSON.parse(response.body, symbolize_names: true)
-				expect(json_response[:errors][:email]).to include "can't be blank"
+				user_response = json_response
+				expect(user_response[:errors][:email]).to include "can't be blank"
 			end
 
 			it { should respond_with 422 }
@@ -62,8 +63,8 @@ describe Api::V1::UsersController do
  			end
 
  			it 'updates the user' do
- 				json_response = JSON.parse(response.body, symbolize_names: true)
- 				expect(json_response[:email]).to eq('newemail@example.com')
+ 				user_response = json_response
+ 				expect(user_response[:email]).to eq('newemail@example.com')
  			end
 
  			it { should respond_with 200}
@@ -77,13 +78,13 @@ describe Api::V1::UsersController do
  			end
 
  			it 'does not update the user' do
- 				json_response = JSON.parse(response.body, symbolize_names: true)
- 				expect(json_response).to have_key(:errors)
+ 				user_response = json_response
+ 				expect(user_response).to have_key(:errors)
  			end
 
  			it 'does include error description' do
- 				json_response = JSON.parse(response.body, symbolize_names: true)
- 				expect(json_response[:errors][:email]).to include 'is invalid'
+ 				user_response = json_response
+ 				expect(user_response[:errors][:email]).to include 'is invalid'
  			end
 
  			it { should respond_with 422 }
