@@ -2,14 +2,10 @@ require 'spec_helper'
 require 'api/v1/users_controller'
 
 describe Api::V1::UsersController do
-	#before(:each) { request.headers['Accept'] = "#{Mime::JSON}" }
-	#before(:each) { request.headers['Content-Type'] = Mime::JSON.to_s 1}
-	#before(:each) { request.headers['Accept'] = 'application/vnd.marketplace.v1'}
-
 	describe 'GET #show' do
 		before(:each) do
 			@user = FactoryGirl.create :user
-			get :show, id: @user.id #, format: :json
+			get :show, id: @user.id
 		end
 
 		it 'responds with a json object that includes the user email' do
@@ -24,7 +20,7 @@ describe Api::V1::UsersController do
 		context 'when it is sucessfully created' do
 			before(:each) do
 				@valid_attributes = FactoryGirl.attributes_for :user
-				post :create, { user: @valid_attributes }, format: :json
+				post :create, { user: @valid_attributes }
 			end
 
 			it 'creates the user' do
@@ -38,7 +34,7 @@ describe Api::V1::UsersController do
 		context 'when it is not created' do
 			before(:each) do
 				@invalid_attributes = { password: '123456', password_confirmation: '123456'}
-				post :create, { user: @invalid_attributes}, format: :json
+				post :create, { user: @invalid_attributes}
 			end
 
 			it 'does not create the user' do
@@ -59,7 +55,8 @@ describe Api::V1::UsersController do
  		context 'when it is sucessfully updated' do
  			before(:each) do
  				@user = FactoryGirl.create(:user)
- 				patch :update, { id: @user.id, user: { email: 'newemail@example.com' }}, format: :json
+ 				api_authorization_header(@user.auth_token)
+ 				patch :update, { id: @user.id, user: { email: 'newemail@example.com' }}
  			end
 
  			it 'updates the user' do
@@ -74,7 +71,8 @@ describe Api::V1::UsersController do
  		context 'when it is not sucessfully updated' do
  			before(:each) do
  				@user = FactoryGirl.create(:user)
- 				patch :update, {id: @user.id, user: { email: 'invalidemail.com'}}, format: :json
+ 				api_authorization_header(@user.auth_token)
+ 				patch :update, {id: @user.id, user: { email: 'invalidemail.com'}}
  			end
 
  			it 'does not update the user' do
@@ -94,7 +92,8 @@ describe Api::V1::UsersController do
  	describe 'DELETE #destroy' do
  		before(:each) do 
  			@user = FactoryGirl.create(:user)
- 			delete :destroy, id: @user.id, format: :json
+ 			api_authorization_header(@user.auth_token)
+ 			delete :destroy, id: @user.id
  		end
 
  		it { should respond_with 204}
