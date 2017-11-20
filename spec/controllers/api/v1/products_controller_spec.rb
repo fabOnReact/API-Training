@@ -8,7 +8,13 @@ describe Api::V1::ProductsController do
 		end
 
 		it 'should show have a product title' do
-			expect(json_response[:product][:title]).to eql(@product.title)
+			product_response = json_response[:product]
+			expect(product_response[:title]).to eql(@product.title)
+		end
+
+		it 'should show have a product title' do
+			product_response = json_response[:product]
+			expect(product_response[:user][:email]).to eql(@product.user.email)
 		end
 
 		it { should respond_with 200 }
@@ -21,7 +27,15 @@ describe Api::V1::ProductsController do
 		end
 
 		it 'should return four products' do 
-			expect(json_response[:products]).to have(4).items
+			products_response = json_response[:products]
+			expect(products_response).to have(4).items
+		end
+
+		it 'should have the user object in each product' do
+			products_response = json_response[:products]
+			products_response.each do |product_response|
+				expect(product_response[:user]).to be_present
+			end
 		end
 
 		it { should respond_with 200 }
