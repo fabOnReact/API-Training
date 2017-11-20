@@ -19,9 +19,6 @@ gem 'coffee-rails', '~> 4.0.0'
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-#Api gems
-gem 'active_model_serializers'
-
 group :doc do
   # bundle exec rake doc:rails generates the API under doc/api.
   gem 'sdoc', require: false
@@ -49,3 +46,4 @@ gem 'compass-rails'
 gem 'furatto'
 gem 'font-awesome-rails'
 gem 'simple_form'
+gem 'active_model_serializers', git: 'git@github.com:rails-api/active_model_serializers.git', branch: '0-8-stable'

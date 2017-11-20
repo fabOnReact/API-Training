@@ -9,7 +9,7 @@ describe Api::V1::UsersController do
 		end
 
 		it 'responds with a json object that includes the user email' do
-			user_response = json_response
+			user_response = json_response[:user]
 			expect(user_response[:email]).to eq(@user.email)
 		end
 
@@ -24,7 +24,7 @@ describe Api::V1::UsersController do
 			end
 
 			it 'creates the user' do
-				user_response = json_response
+				user_response = json_response[:user]
 				expect(user_response[:email]).to eq(@valid_attributes[:email])
 			end
 
@@ -60,7 +60,7 @@ describe Api::V1::UsersController do
  			end
 
  			it 'updates the user' do
- 				user_response = json_response
+ 				user_response = json_response[:user]
  				expect(user_response[:email]).to eq('newemail@example.com')
  			end
 
