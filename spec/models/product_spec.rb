@@ -70,4 +70,32 @@ describe Product do
       end
     end
   end
+
+  describe '.search' do
+    before(:each) do
+      @product1 = FactoryGirl.create(:product, title: 'This is a big product', price: 100)
+      @product2 = FactoryGirl.create(:product, title: 'Free Smiles', price: 50)
+      @product3 = FactoryGirl.create(:product, title: 'big ideas', price: 150)
+      @product4 = FactoryGirl.create(:product, title: 'another Product', price: 30)
+    end
+
+    it 'when a title "bit product" and a price of minimum 100 is set' do
+      search_array = { keyword: 'big product', min_price: 100 }
+      expect(Product.search(search_array)).to match_array([@product1])
+    end
+
+    it 'when a title "product", min price is 30 and max price 150' do 
+      search_array = { keyword: 'product', min_price: 30, max_price: 150 }
+      expect(Product.search(search_array)).to match_array([@product1, @product4])
+    end
+
+    it 'return all the product when not input is given to the search' do
+      expect(Product.search({})).to match_array([@product1, @product2, @product3, @product4])
+    end
+
+    it 'returns the products from the ids' do
+      search_array = { product_ids: [@product1.id, @product2.id]}
+      expect(Product.search(search_array)).to match_array([@product1, @product2])
+    end
+  end
 end
